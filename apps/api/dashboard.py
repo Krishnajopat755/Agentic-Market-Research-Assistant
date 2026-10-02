@@ -235,22 +235,41 @@ def get_dashboard_html() -> str:
     }
 
     .custom-input {
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       border: 1px solid var(--card-border);
       color: var(--text);
       padding: 7px 12px;
       border-radius: 8px;
       font-family: var(--font-mono);
       font-size: 0.85rem;
-      width: 100px;
+      min-width: 250px;
       text-transform: uppercase;
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.2s ease;
     }
 
     .custom-input:focus {
       border-color: #6366f1;
       box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .btn-search {
+      background: rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(99, 102, 241, 0.5);
+      color: #a5b4fc;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-search:hover {
+      background: #6366f1;
+      color: #fff;
+      box-shadow: 0 0 12px var(--accent-glow);
     }
 
     .params-group {
@@ -851,19 +870,88 @@ def get_dashboard_html() -> str:
         <div class="ticker-group">
           <span class="ticker-label">Watchlist:</span>
           <div class="ticker-pills">
-            <button class="ticker-pill active" onclick="selectTicker('AAPL')">AAPL</button>
-            <button class="ticker-pill" onclick="selectTicker('MSFT')">MSFT</button>
-            <button class="ticker-pill" onclick="selectTicker('NVDA')">NVDA</button>
-            <button class="ticker-pill" onclick="selectTicker('SPY')">SPY</button>
+            <button class="ticker-pill active" onclick="selectTicker('RELIANCE')">RELIANCE</button>
+            <button class="ticker-pill" onclick="selectTicker('TCS')">TCS</button>
+            <button class="ticker-pill" onclick="selectTicker('HDFCBANK')">HDFCBANK</button>
+            <button class="ticker-pill" onclick="selectTicker('INFY')">INFY</button>
+            <button class="ticker-pill" onclick="selectTicker('ICICIBANK')">ICICIBANK</button>
+            <button class="ticker-pill" onclick="selectTicker('NIFTY')">NIFTY 50</button>
+            <button class="ticker-pill" onclick="selectTicker('SENSEX')">SENSEX</button>
           </div>
-          <input type="text" id="customTicker" class="custom-input" placeholder="CUSTOM" maxlength="5" onkeyup="handleCustomTicker(event)">
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <input type="text" id="customTicker" class="custom-input" list="niftyStocksList" placeholder="Search NIFTY 50 / SENSEX / Any NSE ticker..." maxlength="25" onkeyup="handleCustomTicker(event)" onchange="handleCustomTickerChange(event)">
+            <button class="btn-search" onclick="submitCustomTicker()">Analyze</button>
+          </div>
+          <datalist id="niftyStocksList">
+            <option value="RELIANCE">Reliance Industries Limited (Energy & Retail)</option>
+            <option value="TCS">Tata Consultancy Services Limited (IT)</option>
+            <option value="HDFCBANK">HDFC Bank Limited (Banking)</option>
+            <option value="ICICIBANK">ICICI Bank Limited (Banking)</option>
+            <option value="BHARTIARTL">Bharti Airtel Limited (Telecom)</option>
+            <option value="INFY">Infosys Limited (IT)</option>
+            <option value="ITC">ITC Limited (FMCG & Conglomerate)</option>
+            <option value="SBIN">State Bank of India (PSU Banking)</option>
+            <option value="LT">Larsen & Toubro Limited (Infrastructure)</option>
+            <option value="HINDUNILVR">Hindustan Unilever Limited (FMCG)</option>
+            <option value="AXISBANK">Axis Bank Limited (Banking)</option>
+            <option value="KOTAKBANK">Kotak Mahindra Bank Limited (Banking)</option>
+            <option value="BAJFINANCE">Bajaj Finance Limited (NBFC)</option>
+            <option value="MARUTI">Maruti Suzuki India Limited (Automobile)</option>
+            <option value="M&M">Mahindra & Mahindra Limited (Automobile)</option>
+            <option value="TITAN">Titan Company Limited (Consumer)</option>
+            <option value="SUNPHARMA">Sun Pharmaceutical Industries (Pharma)</option>
+            <option value="ADANIENT">Adani Enterprises Limited (Commodities)</option>
+            <option value="TATAMOTORS">Tata Motors Limited (Automobile)</option>
+            <option value="ULTRACEMCO">UltraTech Cement Limited (Cement)</option>
+            <option value="NTPC">NTPC Limited (Power)</option>
+            <option value="ONGC">Oil and Natural Gas Corporation (Energy)</option>
+            <option value="POWERGRID">Power Grid Corporation (Power)</option>
+            <option value="TATASTEEL">Tata Steel Limited (Metals)</option>
+            <option value="BAJAJFINSV">Bajaj Finserv Limited (Financials)</option>
+            <option value="COALINDIA">Coal India Limited (Mining)</option>
+            <option value="HCLTECH">HCL Technologies Limited (IT)</option>
+            <option value="NESTLEIND">Nestle India Limited (FMCG)</option>
+            <option value="ASIANPAINT">Asian Paints Limited (Paints)</option>
+            <option value="JSWSTEEL">JSW Steel Limited (Metals)</option>
+            <option value="GRASIM">Grasim Industries Limited (Conglomerate)</option>
+            <option value="TECHM">Tech Mahindra Limited (IT)</option>
+            <option value="HINDALCO">Hindalco Industries Limited (Metals)</option>
+            <option value="CIPLA">Cipla Limited (Pharma)</option>
+            <option value="ADANIPORTS">Adani Ports & SEZ (Ports)</option>
+            <option value="TRENT">Trent Limited (Retail)</option>
+            <option value="BEL">Bharat Electronics Limited (Defence)</option>
+            <option value="SHRIRAMFIN">Shriram Finance Limited (NBFC)</option>
+            <option value="DRREDDY">Dr. Reddy's Laboratories (Pharma)</option>
+            <option value="BPCL">Bharat Petroleum Corporation (Oil)</option>
+            <option value="EICHERMOT">Eicher Motors Limited (Auto)</option>
+            <option value="WIPRO">Wipro Limited (IT)</option>
+            <option value="APOLLOHOSP">Apollo Hospitals Enterprise (Healthcare)</option>
+            <option value="HEROMOTOCO">Hero MotoCorp Limited (Auto)</option>
+            <option value="TATACONSUM">Tata Consumer Products (FMCG)</option>
+            <option value="BRITANNIA">Britannia Industries Limited (FMCG)</option>
+            <option value="SBILIFE">SBI Life Insurance (Insurance)</option>
+            <option value="HDFCLIFE">HDFC Life Insurance (Insurance)</option>
+            <option value="INDUSINDBK">IndusInd Bank Limited (Banking)</option>
+            <option value="DIVISLAB">Divi's Laboratories Limited (Pharma)</option>
+            <option value="TATAPOWER">Tata Power Company Limited (Power)</option>
+            <option value="JIOFIN">Jio Financial Services (Fintech)</option>
+            <option value="ZOMATO">Zomato Limited (Delivery/Internet)</option>
+            <option value="VEDL">Vedanta Limited (Resources)</option>
+            <option value="HAL">Hindustan Aeronautics Limited (Defence)</option>
+            <option value="NIFTY">NIFTY 50 Benchmark Index (^NSEI)</option>
+            <option value="SENSEX">S&P BSE SENSEX 30 Index (^BSESN)</option>
+          </datalist>
         </div>
 
         <!-- Parameters -->
         <div class="params-group">
           <div class="param-item">
             <span class="param-label">Execution Mode</span>
-            <span class="param-value" style="color:#34d399;">FIXTURE (Deterministic)</span>
+            <span class="param-value" style="color:#34d399;">LIVE (Real-Time Indian Equities)</span>
+          </div>
+          <div class="param-item">
+            <span class="param-label">Market Universe</span>
+            <span class="param-value" style="color:#38bdf8;">NIFTY 50 &bull; SENSEX</span>
           </div>
           <div class="param-item">
             <span class="param-label">Lookback Window</span>
@@ -921,27 +1009,39 @@ def get_dashboard_html() -> str:
   </main>
 
   <script>
-    let activeSymbol = "AAPL";
+    let activeSymbol = "RELIANCE";
     let currentReport = null;
     let currentRunId = null;
 
     function selectTicker(sym) {
       activeSymbol = sym.toUpperCase();
       document.querySelectorAll(".ticker-pill").forEach(el => {
-        el.classList.toggle("active", el.innerText === activeSymbol);
+        const t = el.innerText.replace(" 50", "").trim();
+        el.classList.toggle("active", t === activeSymbol || el.innerText === activeSymbol);
       });
       document.getElementById("customTicker").value = "";
       runAnalysis();
     }
 
+    function submitCustomTicker() {
+      const val = document.getElementById("customTicker").value.trim().toUpperCase();
+      if (val) {
+        activeSymbol = val;
+        document.querySelectorAll(".ticker-pill").forEach(el => el.classList.remove("active"));
+        runAnalysis();
+      }
+    }
+
+    function handleCustomTickerChange(e) {
+      const val = document.getElementById("customTicker").value.trim();
+      if (val) {
+        submitCustomTicker();
+      }
+    }
+
     function handleCustomTicker(e) {
       if (e.key === "Enter") {
-        const val = e.target.value.trim().toUpperCase();
-        if (val) {
-          activeSymbol = val;
-          document.querySelectorAll(".ticker-pill").forEach(el => el.classList.remove("active"));
-          runAnalysis();
-        }
+        submitCustomTicker();
       }
     }
 
@@ -963,9 +1063,9 @@ def get_dashboard_html() -> str:
         const payload = {
           symbols: [activeSymbol],
           price_lookback_days: 120,
-          news_lookback_hours: 24,
+          news_lookback_hours: 48,
           signal_horizon_bars: 5,
-          mode: "fixture"
+          mode: "live"
         };
 
         const res = await fetch("/research/run", {
@@ -984,9 +1084,43 @@ def get_dashboard_html() -> str:
 
         const data = await res.json();
         currentRunId = data.run_id;
-        currentReport = data.reports[activeSymbol];
+        const cleanSym = activeSymbol.toUpperCase().trim();
+        const baseSym = cleanSym.split(".")[0].replace("^", "");
+        currentReport = (data.reports && (
+             data.reports[cleanSym] 
+          || data.reports[baseSym] 
+          || data.reports[cleanSym + ".NS"] 
+          || data.reports[cleanSym.toLowerCase()]
+          || Object.values(data.reports)[0]
+        )) || null;
 
         setStepperStage("complete");
+        if (!currentReport) {
+          const errDetail = (data.errors && data.errors.length > 0) 
+            ? data.errors.join("<br>") 
+            : `No market quote or historical records found for symbol "${activeSymbol}".`;
+          document.getElementById("reportContainer").innerHTML = `
+            <div class="panel-card" style="border-color: var(--amber); margin-top: 24px;">
+              <div class="panel-card-header">
+                <div class="panel-title" style="color: var(--amber);">Stock Quote Notice: ${activeSymbol}</div>
+                <div class="panel-pill" style="border-color: var(--amber); color: var(--amber);">Live Search</div>
+              </div>
+              <p style="color: var(--text-muted); margin-top: 12px; font-size: 0.95rem; line-height: 1.6;">
+                ${errDetail}
+              </p>
+              <div style="margin-top: 16px; padding: 14px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                <strong style="color: var(--text);">Quick Indian Market Suggestions:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px; color: var(--text-muted); line-height: 1.6;">
+                  <li>Search any <strong>NIFTY 50</strong> stock: <code>RELIANCE</code>, <code>TCS</code>, <code>HDFCBANK</code>, <code>INFY</code>, <code>ICICIBANK</code>, <code>BHARTIARTL</code>, <code>SBIN</code>, <code>LT</code>, <code>MARUTI</code>, <code>TATAPOWER</code></li>
+                  <li>Search major indices: <code>NIFTY</code> (or <code>^NSEI</code>), <code>SENSEX</code> (or <code>^BSESN</code>)</li>
+                  <li>Search any NSE/BSE ticker directly: e.g., <code>BEL.NS</code>, <code>HAL.NS</code>, <code>TMPV.NS</code>, <code>ETERNAL.NS</code></li>
+                </ul>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
         renderReport(currentReport);
       } catch (err) {
         console.error(err);
@@ -1014,6 +1148,72 @@ def get_dashboard_html() -> str:
       });
     }
 
+    function getCompanyFullName(sym) {
+      const clean = sym.toUpperCase().replace(".NS", "").replace(".BO", "").replace("^", "");
+      const map = {
+        "RELIANCE": "Reliance Industries Limited",
+        "TCS": "Tata Consultancy Services Limited",
+        "HDFCBANK": "HDFC Bank Limited",
+        "ICICIBANK": "ICICI Bank Limited",
+        "BHARTIARTL": "Bharti Airtel Limited",
+        "INFY": "Infosys Limited",
+        "ITC": "ITC Limited",
+        "SBIN": "State Bank of India",
+        "LT": "Larsen & Toubro Limited",
+        "HINDUNILVR": "Hindustan Unilever Limited",
+        "AXISBANK": "Axis Bank Limited",
+        "KOTAKBANK": "Kotak Mahindra Bank Limited",
+        "BAJFINANCE": "Bajaj Finance Limited",
+        "MARUTI": "Maruti Suzuki India Limited",
+        "M&M": "Mahindra & Mahindra Limited",
+        "TITAN": "Titan Company Limited",
+        "SUNPHARMA": "Sun Pharmaceutical Industries",
+        "ADANIENT": "Adani Enterprises Limited",
+        "TATAMOTORS": "Tata Motors Limited",
+        "ULTRACEMCO": "UltraTech Cement Limited",
+        "NTPC": "NTPC Limited",
+        "ONGC": "Oil and Natural Gas Corporation",
+        "POWERGRID": "Power Grid Corporation",
+        "TATASTEEL": "Tata Steel Limited",
+        "BAJAJFINSV": "Bajaj Finserv Limited",
+        "COALINDIA": "Coal India Limited",
+        "HCLTECH": "HCL Technologies Limited",
+        "NESTLEIND": "Nestle India Limited",
+        "ASIANPAINT": "Asian Paints Limited",
+        "JSWSTEEL": "JSW Steel Limited",
+        "GRASIM": "Grasim Industries Limited",
+        "TECHM": "Tech Mahindra Limited",
+        "HINDALCO": "Hindalco Industries Limited",
+        "CIPLA": "Cipla Limited",
+        "ADANIPORTS": "Adani Ports & SEZ Limited",
+        "TRENT": "Trent Limited",
+        "BEL": "Bharat Electronics Limited",
+        "SHRIRAMFIN": "Shriram Finance Limited",
+        "DRREDDY": "Dr. Reddy's Laboratories",
+        "BPCL": "Bharat Petroleum Corporation",
+        "EICHERMOT": "Eicher Motors Limited",
+        "WIPRO": "Wipro Limited",
+        "APOLLOHOSP": "Apollo Hospitals Enterprise",
+        "HEROMOTOCO": "Hero MotoCorp Limited",
+        "TATACONSUM": "Tata Consumer Products",
+        "BRITANNIA": "Britannia Industries Limited",
+        "SBILIFE": "SBI Life Insurance",
+        "HDFCLIFE": "HDFC Life Insurance",
+        "INDUSINDBK": "IndusInd Bank Limited",
+        "DIVISLAB": "Divi's Laboratories Limited",
+        "TATAPOWER": "Tata Power Company Limited",
+        "JIOFIN": "Jio Financial Services",
+        "ZOMATO": "Zomato Limited",
+        "VEDL": "Vedanta Limited",
+        "HAL": "Hindustan Aeronautics Limited",
+        "NSEI": "NIFTY 50 Benchmark Index",
+        "NIFTY": "NIFTY 50 Benchmark Index",
+        "BSESN": "S&P BSE SENSEX 30 Index",
+        "SENSEX": "S&P BSE SENSEX 30 Index",
+      };
+      return map[clean] || (sym.endsWith(".NS") || sym.endsWith(".BO") ? clean + " Limited" : sym);
+    }
+
     function renderReport(rep) {
       if (!rep) return;
 
@@ -1033,13 +1233,21 @@ def get_dashboard_html() -> str:
       const sent = rep.sentiment;
       const sig = rep.signal;
 
+      const isIndian = !rep.symbol.includes("AAPL") && !rep.symbol.includes("MSFT") && !rep.symbol.includes("NVDA") && !rep.symbol.includes("SPY");
+      const curr = (rep.symbol.endsWith(".NS") || rep.symbol.endsWith(".BO") || rep.symbol.startsWith("^") || isIndian) ? "₹" : "$";
+
       const html = `
         <!-- Hero Section -->
         <div class="hero-card">
           <div class="${glowClass}"></div>
           <div class="hero-header">
             <div class="hero-symbol-group">
-              <div class="hero-symbol">${rep.symbol}</div>
+              <div>
+                <div class="hero-symbol">${rep.symbol}</div>
+                <div style="font-size: 0.92rem; color: var(--text-muted); font-weight: 600; margin-top: 3px;">
+                  ${getCompanyFullName(rep.symbol)}
+                </div>
+              </div>
               <div class="state-pill ${stateClass}">
                 ● ${rep.market_state}
               </div>
@@ -1081,7 +1289,7 @@ def get_dashboard_html() -> str:
             <div class="score-card">
               <div class="score-title">Market Last Close</div>
               <div class="score-val">
-                $${snap.price.toFixed(2)}
+                ${curr}${snap.price.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                 <span style="font-size: 0.95rem; font-weight: 600; color: ${snap.change >= 0 ? '#10b981' : '#f43f5e'};">
                   ${snap.change >= 0 ? '+' : ''}${snap.change.toFixed(2)} (${snap.change_percent >= 0 ? '+' : ''}${snap.change_percent.toFixed(2)}%)
                 </span>
@@ -1125,15 +1333,15 @@ def get_dashboard_html() -> str:
               <div class="metric-list">
                 <div class="metric-row">
                   <span class="metric-name">Open Price</span>
-                  <span class="metric-num">$${snap.open.toFixed(2)}</span>
+                  <span class="metric-num">${curr}${snap.open.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
                 </div>
                 <div class="metric-row">
                   <span class="metric-name">Day High</span>
-                  <span class="metric-num">$${snap.high.toFixed(2)}</span>
+                  <span class="metric-num">${curr}${snap.high.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
                 </div>
                 <div class="metric-row">
                   <span class="metric-name">Day Low</span>
-                  <span class="metric-num">$${snap.low.toFixed(2)}</span>
+                  <span class="metric-num">${curr}${snap.low.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
                 </div>
                 <div class="metric-row">
                   <span class="metric-name">Trading Volume</span>
@@ -1174,7 +1382,7 @@ def get_dashboard_html() -> str:
                 </div>
                 <div class="metric-row">
                   <span class="metric-name">ATR (14)</span>
-                  <span class="metric-num">$${tech.atr_14 ? tech.atr_14.toFixed(2) : 'N/A'}</span>
+                  <span class="metric-num">${curr}${tech.atr_14 ? tech.atr_14.toFixed(2) : 'N/A'}</span>
                 </div>
                 <div class="metric-row">
                   <span class="metric-name">Realized Volatility (20d)</span>
@@ -1234,7 +1442,7 @@ def get_dashboard_html() -> str:
                   <div style="font-size: 0.8rem; font-weight: 700; color: #818cf8; text-transform: uppercase; margin-bottom: 6px;">
                     ${key.replace('_', ' ')}
                   </div>
-                  <div style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.5;">${val}</div>
+                  <div style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.5;">${curr === '₹' ? val.replaceAll('$', '₹') : val}</div>
                 </div>
               `).join('')}
             </div>
@@ -1369,7 +1577,7 @@ def get_dashboard_html() -> str:
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    // Auto-load AAPL analysis on initial page load
+    // Auto-load RELIANCE analysis on initial page load
     window.addEventListener("DOMContentLoaded", () => {
       runAnalysis();
     });

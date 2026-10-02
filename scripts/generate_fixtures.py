@@ -6,7 +6,9 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 
-def generate_market_data(symbol: str, start_price: float, drift: float, volatility: float, num_days: int = 120):
+def generate_market_data(
+    symbol: str, start_price: float, drift: float, volatility: float, num_days: int = 120
+):
     bars = []
     base_date = datetime(2026, 9, 25, 16, 0, 0, tzinfo=timezone.utc)
     # Generate business days going backwards
@@ -29,21 +31,23 @@ def generate_market_data(symbol: str, start_price: float, drift: float, volatili
         low = round(min(open_p, close) * (1 - abs(math.cos(i * 0.5)) * 0.008), 2)
         volume = int(45_000_000 + math.sin(i * 0.4) * 15_000_000)
 
-        bars.append({
-            "symbol": symbol,
-            "event_time": dt.isoformat(),
-            "retrieved_at": dt.isoformat(),
-            "as_of": "2026-09-25T16:10:00+00:00",
-            "open": open_p,
-            "high": high,
-            "low": low,
-            "close": close,
-            "volume": volume,
-            "source": "fixture",
-            "entitlement": "eod",
-            "is_stale": False,
-            "freshness_seconds": (base_date - dt).total_seconds(),
-        })
+        bars.append(
+            {
+                "symbol": symbol,
+                "event_time": dt.isoformat(),
+                "retrieved_at": dt.isoformat(),
+                "as_of": "2026-09-25T16:10:00+00:00",
+                "open": open_p,
+                "high": high,
+                "low": low,
+                "close": close,
+                "volume": volume,
+                "source": "fixture",
+                "entitlement": "eod",
+                "is_stale": False,
+                "freshness_seconds": (base_date - dt).total_seconds(),
+            }
+        )
         price = close
     return bars
 
@@ -136,22 +140,30 @@ def main():
     pit_dir.mkdir(parents=True, exist_ok=True)
 
     # AAPL: Moderate bullish trend from 195 to 228
-    aapl_bars = generate_market_data("AAPL", start_price=195.0, drift=33.0, volatility=0.015, num_days=120)
+    aapl_bars = generate_market_data(
+        "AAPL", start_price=195.0, drift=33.0, volatility=0.015, num_days=120
+    )
     with open(market_dir / "AAPL_daily.json", "w") as f:
         json.dump(aapl_bars, f, indent=2)
 
     # MSFT: Moderate steady uptrend
-    msft_bars = generate_market_data("MSFT", start_price=410.0, drift=38.0, volatility=0.012, num_days=120)
+    msft_bars = generate_market_data(
+        "MSFT", start_price=410.0, drift=38.0, volatility=0.012, num_days=120
+    )
     with open(market_dir / "MSFT_daily.json", "w") as f:
         json.dump(msft_bars, f, indent=2)
 
     # NVDA: Strong momentum
-    nvda_bars = generate_market_data("NVDA", start_price=110.0, drift=25.0, volatility=0.025, num_days=120)
+    nvda_bars = generate_market_data(
+        "NVDA", start_price=110.0, drift=25.0, volatility=0.025, num_days=120
+    )
     with open(market_dir / "NVDA_daily.json", "w") as f:
         json.dump(nvda_bars, f, indent=2)
 
     # SPY: Benchmark
-    spy_bars = generate_market_data("SPY", start_price=530.0, drift=45.0, volatility=0.008, num_days=120)
+    spy_bars = generate_market_data(
+        "SPY", start_price=530.0, drift=45.0, volatility=0.008, num_days=120
+    )
     with open(market_dir / "SPY_daily.json", "w") as f:
         json.dump(spy_bars, f, indent=2)
 
@@ -175,12 +187,16 @@ def main():
             "title": "Apple Reports Record Services Revenue and Strong iPhone Demand in Q4",
             "description": "Apple Inc. announced record-breaking quarterly services revenue, driven by App Store and cloud subscription momentum.",
             "article_url": "https://www.ft.com/content/apple-q4-record-services-growth?utm_campaign=syndication&ref=rss",
-            "published_at": (datetime.fromisoformat(aapl_news[0]["published_at"]) + timedelta(minutes=8)).isoformat(),
+            "published_at": (
+                datetime.fromisoformat(aapl_news[0]["published_at"]) + timedelta(minutes=8)
+            ).isoformat(),
             "retrieved_at": datetime.now(timezone.utc).isoformat(),
-            "available_at": (datetime.fromisoformat(aapl_news[0]["published_at"]) + timedelta(minutes=8)).isoformat(),
+            "available_at": (
+                datetime.fromisoformat(aapl_news[0]["published_at"]) + timedelta(minutes=8)
+            ).isoformat(),
             "tickers": ["AAPL"],
             "source_provider": "alphavantage_fixture",
-        }
+        },
     ]
     with open(news_dir / "duplicate_news.json", "w") as f:
         json.dump(dup_news, f, indent=2)
@@ -233,32 +249,36 @@ def main():
     future_bars = list(aapl_bars)
     future_dt_1 = datetime(2026, 9, 28, 16, 0, 0, tzinfo=timezone.utc)
     future_dt_2 = datetime(2026, 9, 29, 16, 0, 0, tzinfo=timezone.utc)
-    future_bars.append({
-        "symbol": "AAPL",
-        "event_time": future_dt_1.isoformat(),
-        "retrieved_at": future_dt_1.isoformat(),
-        "as_of": "2026-09-29T16:10:00+00:00",
-        "open": 350.0,
-        "high": 380.0,
-        "low": 340.0,
-        "close": 375.0,
-        "volume": 120_000_000,
-        "source": "fixture",
-        "entitlement": "eod",
-    })
-    future_bars.append({
-        "symbol": "AAPL",
-        "event_time": future_dt_2.isoformat(),
-        "retrieved_at": future_dt_2.isoformat(),
-        "as_of": "2026-09-29T16:10:00+00:00",
-        "open": 375.0,
-        "high": 400.0,
-        "low": 370.0,
-        "close": 395.0,
-        "volume": 150_000_000,
-        "source": "fixture",
-        "entitlement": "eod",
-    })
+    future_bars.append(
+        {
+            "symbol": "AAPL",
+            "event_time": future_dt_1.isoformat(),
+            "retrieved_at": future_dt_1.isoformat(),
+            "as_of": "2026-09-29T16:10:00+00:00",
+            "open": 350.0,
+            "high": 380.0,
+            "low": 340.0,
+            "close": 375.0,
+            "volume": 120_000_000,
+            "source": "fixture",
+            "entitlement": "eod",
+        }
+    )
+    future_bars.append(
+        {
+            "symbol": "AAPL",
+            "event_time": future_dt_2.isoformat(),
+            "retrieved_at": future_dt_2.isoformat(),
+            "as_of": "2026-09-29T16:10:00+00:00",
+            "open": 375.0,
+            "high": 400.0,
+            "low": 370.0,
+            "close": 395.0,
+            "volume": 150_000_000,
+            "source": "fixture",
+            "entitlement": "eod",
+        }
+    )
     with open(pit_dir / "AAPL_future_tampered.json", "w") as f:
         json.dump(future_bars, f, indent=2)
 

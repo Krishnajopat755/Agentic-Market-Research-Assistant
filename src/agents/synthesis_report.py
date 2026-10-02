@@ -50,11 +50,17 @@ class SynthesisReportAgent(BaseAgent):
         evidence_pool = [ResearchEvidence(**e) for e in evidence_pool_raw]
 
         # 2. Synthesize narrative via LLM adapter
+        from src.providers.indian_stocks import get_equity_metadata
+
+        meta = get_equity_metadata(symbol)
+        curr = meta.get("currency_symbol", "₹" if symbol.endswith((".NS", ".BO")) else "$")
+
         ret_5d_str = f"{technical.returns_5d:+.2%}" if technical.returns_5d is not None else "0%"
         prompt = (
             f"Analyze research findings for {symbol} as of {request.analysis_timestamp.isoformat()}.\n"
+            f"Company: {meta['name']} ({meta['sector']})\n"
             f"Market State: {signal.state} (Score: {signal.score:+.2f}, Confidence: {signal.confidence:.1%})\n"
-            f"Latest Price: ${snapshot.price:.2f}, 5d Return: {ret_5d_str}\n"
+            f"Latest Price: {curr}{snapshot.price:.2f}, 5d Return: {ret_5d_str}\n"
             f"RSI: {technical.rsi_14 or 'N/A'}, SMA20: {technical.sma_20 or 'N/A'}\n"
             f"Mean Sentiment: {sentiment.mean_score:+.2f} over {sentiment.article_count} articles.\n"
             "Create structured synthesis. Every claim must refer to verifiable evidence."
@@ -77,11 +83,11 @@ class SynthesisReportAgent(BaseAgent):
             output = SynthesisReportAgentOutput(**llm_resp.structured_output)
         else:
             output = SynthesisReportAgentOutput(
-                headline=f"{symbol} Market Research Synthesis",
+                headline=f"{meta['name']} Market Research Synthesis",
                 market_state=signal.state,
                 signal_score=signal.score,
                 confidence=signal.confidence,
-                executive_summary=f"{symbol} shows a {signal.state} posture with quantitative score {signal.score:+.2f}.",
+                executive_summary=f"{symbol} ({meta['name']}) shows a {signal.state} posture with quantitative score {signal.score:+.2f}.",
                 key_evidence=evidence_pool[:3],
                 caveats=signal.limitations,
             )
@@ -95,9 +101,9 @@ class SynthesisReportAgent(BaseAgent):
 
         # 4. Construct complete DailyResearchReport
         scenario_analysis = {
-            "bull_case": f"Momentum continues above ${snapshot.price * 1.05:.2f} driven by sustained institutional accumulation.",
-            "base_case": f"Consolidation near ${snapshot.price:.2f} within 20-day volatility band.",
-            "bear_case": f"Breakdown below support at ${snapshot.price * 0.95:.2f} if sentiment deteriorates.",
+            "bull_case": f"Momentum continues above {curr}{snapshot.price * 1.05:.2f} driven by sustained institutional accumulation.",
+            "base_case": f"Consolidation near {curr}{snapshot.price:.2f} within 20-day volatility band.",
+            "bear_case": f"Breakdown below support at {curr}{snapshot.price * 0.95:.2f} if sentiment deteriorates.",
         }
 
         report = DailyResearchReport(

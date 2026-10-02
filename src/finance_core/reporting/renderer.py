@@ -22,12 +22,17 @@ def render_markdown(report: DailyResearchReport) -> str:
     # Market Snapshot Table
     lines.append("### Market Snapshot")
     s = report.snapshot
+    from src.providers.indian_stocks import get_equity_metadata
+
+    meta = get_equity_metadata(report.symbol)
+    curr = meta.get("currency_symbol", "₹" if report.symbol.endswith((".NS", ".BO")) else "$")
+
     lines.append("| Metric | Value | Freshness |")
     lines.append("|---|---|---|")
     lines.append(
-        f"| **Close Price** | ${s.price:.2f} ({s.change:+.2f} / {s.change_percent:+.2f}%) | {s.freshness_seconds / 60:.1f} mins |"
+        f"| **Close Price** | {curr}{s.price:.2f} ({s.change:+.2f} / {s.change_percent:+.2f}%) | {s.freshness_seconds / 60:.1f} mins |"
     )
-    lines.append(f"| **Day Range** | ${s.low:.2f} - ${s.high:.2f} | Open: ${s.open:.2f} |")
+    lines.append(f"| **Day Range** | {curr}{s.low:.2f} - {curr}{s.high:.2f} | Open: {curr}{s.open:.2f} |")
     lines.append(f"| **Volume** | {s.volume:,.0f} | Source: {s.source} |")
     lines.append(
         f"| **Status** | {'[STALE]' if s.is_stale else '[FRESH]'} | Entitlement: {report.snapshot.source} |\n"
@@ -47,7 +52,7 @@ def render_markdown(report: DailyResearchReport) -> str:
     lines.append(
         f"| **MACD / Signal** | {t.macd or 'N/A'} / {t.macd_signal or 'N/A'} | Hist: {t.macd_hist or 'N/A'} |"
     )
-    lines.append(f"| **ATR (14)** | ${t.atr_14 or 'N/A'} | Volatility proxy |")
+    lines.append(f"| **ATR (14)** | {curr}{t.atr_14 or 'N/A'} | Volatility proxy |")
     lines.append(
         f"| **Realized Volatility (20d)** | {f'{t.realized_volatility_20:.1%}' if t.realized_volatility_20 else 'N/A'} | Annualized rolling |"
     )

@@ -25,3 +25,14 @@ mlflow.db
 .env
 .env.*
 !.env.example
+
+# Local Agent Tooling & Video Artifacts
+.agents/
+.claude/
+brag-output/
+skills-lock.json
+
+# Logs & OS artifacts
+*.log
+.DS_Store
+Thumbs.db

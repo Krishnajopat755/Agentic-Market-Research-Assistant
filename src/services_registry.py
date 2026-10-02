@@ -27,11 +27,16 @@ def create_default_services(mode: str = "fixture") -> AppServices:
     if mode == "fixture":
         market_provider = FixtureMarketDataProvider()
         news_provider = FixtureNewsProvider()
-    else:
+    elif mode == "alphavantage":
         from src.providers.alphavantage import AlphaVantageProvider
 
         market_provider = AlphaVantageProvider()
         news_provider = AlphaVantageProvider()
+    else:
+        from src.providers.live_provider import LiveMarketDataProvider, LiveNewsProvider
+
+        market_provider = LiveMarketDataProvider()
+        news_provider = LiveNewsProvider()
 
     return AppServices(
         market_provider=market_provider,
