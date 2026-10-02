@@ -1,0 +1,32 @@
+[
+  {
+    "article_id": "aapl-art-001",
+    "provider_article_id": "av-aapl-1001",
+    "publisher": "Financial Times",
+    "title": "Apple Reports Record Services Revenue and Strong iPhone Demand in Q4",
+    "description": "Apple Inc. announced record-breaking quarterly services revenue, driven by App Store and cloud subscription momentum. Management raised guidance for next quarter.",
+    "article_url": "https://www.ft.com/content/apple-q4-record-services-growth?utm_source=feed",
+    "published_at": "2026-09-25T13:30:00+00:00",
+    "retrieved_at": "2026-09-25T15:30:00+00:00",
+    "available_at": "2026-09-25T13:30:00+00:00",
+    "tickers": [
+      "AAPL"
+    ],
+    "source_provider": "alphavantage_fixture"
+  },
+  {
+    "article_id": "aapl-art-dup-001",
+    "provider_article_id": "av-aapl-1001-wire",
+    "publisher": "Yahoo Finance (Syndicated)",
+    "title": "Apple Reports Record Services Revenue and Strong iPhone Demand in Q4",
+    "description": "Apple Inc. announced record-breaking quarterly services revenue, driven by App Store and cloud subscription momentum.",
+    "article_url": "https://www.ft.com/content/apple-q4-record-services-growth?utm_campaign=syndication&ref=rss",
+    "published_at": "2026-09-25T13:38:00+00:00",
+    "retrieved_at": "2026-09-27T18:39:17.797079+00:00",
+    "available_at": "2026-09-25T13:38:00+00:00",
+    "tickers": [
+      "AAPL"
+    ],
+    "source_provider": "alphavantage_fixture"
+  }
+]

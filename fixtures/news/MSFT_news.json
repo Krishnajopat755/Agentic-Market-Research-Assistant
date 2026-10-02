@@ -1,0 +1,17 @@
+[
+  {
+    "article_id": "msft-art-001",
+    "provider_article_id": "av-msft-2001",
+    "publisher": "CNBC",
+    "title": "Microsoft Cloud Profits Surge as Azure AI Workloads Accelerate",
+    "description": "Microsoft posted substantial quarterly cloud growth, with Azure revenue outpacing consensus estimates driven by enterprise AI adoption.",
+    "article_url": "https://www.cnbc.com/microsoft-azure-cloud-growth-surges",
+    "published_at": "2026-09-25T12:30:00+00:00",
+    "retrieved_at": "2026-09-25T15:30:00+00:00",
+    "available_at": "2026-09-25T12:30:00+00:00",
+    "tickers": [
+      "MSFT"
+    ],
+    "source_provider": "alphavantage_fixture"
+  }
+]

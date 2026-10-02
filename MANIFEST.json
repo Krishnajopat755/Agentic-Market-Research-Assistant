@@ -1,0 +1,44 @@
+{
+  "project": "Agentic Market Research Assistant",
+  "version": "1.0-spec",
+  "protocol_baseline": "MCP 2026-07-28, official Python SDK v2",
+  "runtime_agents": [
+    "Market Data Agent",
+    "Sentiment & Technical Agent",
+    "Synthesis & Report Agent"
+  ],
+  "providers": [
+    "Alpha Vantage adapter",
+    "Polygon/Massive adapter (secondary)"
+  ],
+  "files": [
+    ".claude/agents/architecture-reviewer.md",
+    ".claude/agents/finance-ml-reviewer.md",
+    ".claude/agents/mcp-engineer.md",
+    ".claude/agents/security-reviewer.md",
+    "ANTIGRAVITY_HANDOFF.md",
+    "CLAUDE.md",
+    "CONFIG_REFERENCE.md",
+    "MANIFEST.json",
+    "MASTER_PROJECT_SPEC.md",
+    "README.md",
+    "docs/01_PRD.md",
+    "docs/02_PIPELINE_FLOW.md",
+    "docs/03_SYSTEM_ARCHITECTURE.md",
+    "docs/04_AGENT_SPECIFICATIONS.md",
+    "docs/05_MCP_SERVER_SPEC.md",
+    "docs/06_DATA_CONTRACTS.md",
+    "docs/07_MARKET_DATA_PROVIDER_SPEC.md",
+    "docs/08_SIGNAL_ANALYTICS_SPEC.md",
+    "docs/09_POINT_IN_TIME_AND_LEAKAGE.md",
+    "docs/10_OBSERVABILITY_AND_SECURITY.md",
+    "docs/11_TEST_STRATEGY.md",
+    "docs/12_DEVOPS_AND_DEPLOYMENT.md",
+    "docs/13_IMPLEMENTATION_ROADMAP.md",
+    "docs/14_ACCEPTANCE_CRITERIA.md",
+    "docs/15_PORTFOLIO_DEMO.md",
+    "docs/16_ARCHITECTURE_DECISIONS.md",
+    "docs/17_REPORT_TEMPLATE.md",
+    "docs/18_RUNBOOK.md"
+  ]
+}

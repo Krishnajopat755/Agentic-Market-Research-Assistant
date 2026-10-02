@@ -1,0 +1,17 @@
+[
+  {
+    "article_id": "stale-art-001",
+    "provider_article_id": "stale-001",
+    "publisher": "Tech Daily",
+    "title": "Apple Announces Product Launch Date For Next Month",
+    "description": "Historical announcement of annual hardware event.",
+    "article_url": "https://example.com/stale-apple-launch",
+    "published_at": "2026-09-20T10:00:00+00:00",
+    "retrieved_at": "2026-09-20T10:00:00+00:00",
+    "available_at": "2026-09-20T10:00:00+00:00",
+    "tickers": [
+      "AAPL"
+    ],
+    "source_provider": "alphavantage_fixture"
+  }
+]

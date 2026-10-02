@@ -1,0 +1,27 @@
+# Python & Virtualenv
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Storage & Runtime artifacts (keep folder structure)
+storage/artifacts/*
+!storage/artifacts/.gitkeep
+storage/mlflow_runs/*
+!storage/mlflow_runs/.gitkeep
+mlflow.db
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
