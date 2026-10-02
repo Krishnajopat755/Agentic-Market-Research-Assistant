@@ -184,8 +184,3 @@ POLYGON_API_KEY=
 ANTHROPIC_API_KEY=
 ```
 
----
-
-## Disclaimer
-
-This project is built for market research, quantitative analysis, and educational purposes. It does not place live orders or provide certified financial investment advice.
