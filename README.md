@@ -1,124 +1,191 @@
 # Agentic Market Research Assistant
 
-Industry-style, portfolio-ready multi-agent finance research system that collects market/news data through API-backed MCP tools, performs sentiment + technical analysis, computes a bounded quantitative research signal, and generates an evidence-linked daily market research report.
+An automated equity research assistant that generates real-time quantitative reports for Indian stocks (**NIFTY 50** & **S&P BSE SENSEX**) and global equities.
 
-## Core idea
+It pulls live price action and financial news, runs technical and sentiment analysis, calculates a bounded research signal (`BULLISH`, `BEARISH`, or `NEUTRAL`), and delivers a clean dashboard report with zero lookahead bias.
 
-```text
-User / Scheduler
-       |
-       v
-Orchestrator
-       |
-       +--> Market Data Agent
-       |       |
-       |       +--> MCP: market/news tools
-       |
-       +--> Sentiment & Technical Agent
-       |       |
-       |       +--> MCP: sentiment/indicator/feature tools
-       |
-       +--> Synthesis & Report Agent
-               |
-               +--> MCP: evidence/report tools
-       |
-       v
-Daily Research Report + Signal
+---
+
+## What It Does
+
+When you search for any stock (like `RELIANCE`, `TCS`, `HDFCBANK`, `INFY`, or indices like `NIFTY`):
+
+1. **Fetches Live Market Data:** Retrieves real-time quotes, day high/lows, trading volume, and historical daily bars via Yahoo Finance (`yfinance`).
+2. **Scrapes & Filters News:** Pulls recent news headlines and deduplicates articles so the same wire story isn't counted twice.
+3. **Calculates Technical Indicators:** Computes 20/50-day Simple Moving Averages, EMA, 14-day RSI, MACD, Average True Range (ATR), and 20-day realized volatility.
+4. **Scores Sentiment:** Uses a financial lexicon to grade recent headlines into positive, neutral, or negative sentiment.
+5. **Combines Multi-Factor Signals:** Weights price momentum, trend, volatility, and sentiment into an overall signal score between `-1.0` and `+1.0` with a confidence percentage.
+6. **Produces an Auditable Report:** Formats everything into a dark-mode dashboard with live Rupee (`₹`) pricing, dynamic summaries, and verifiable evidence claims.
+
+---
+
+## Quick Start (Run Locally)
+
+### Prerequisites
+- **Python 3.11+** installed on your system.
+- `git` installed.
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Krishnajopat755/Agentic-Market-Research-Assistant.git
+cd Agentic-Market-Research-Assistant
 ```
 
-Runtime agents reason about research tasks. Actual data retrieval, normalization, indicator calculation, feature generation, scoring, and report persistence happen through typed, auditable MCP tools.
+### 2. Set Up a Virtual Environment
 
-## Product boundaries
+**Using `venv` (standard):**
+```bash
+# Windows
+python -m venv .venv
+.venv\Scripts\activate
 
-This is a **research assistant**, not an automated execution system.
+# macOS / Linux
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-It must:
-- never place trades;
-- never submit orders;
-- never connect to a brokerage account in v1;
-- timestamp every observation;
-- distinguish source publication time from ingestion time;
-- preserve original source URLs/IDs;
-- detect stale/incomplete data;
-- prevent look-ahead bias in historical backtests;
-- show evidence behind every material conclusion.
+**Or using `uv` (recommended for faster installs):**
+```bash
+uv venv
+# Windows: .venv\Scripts\activate
+# Linux/macOS: source .venv/bin/activate
+uv sync
+```
 
-A report may contain a quantitative market-state or directional research signal, but it must clearly label methodology, uncertainty, data freshness, and its non-personalized research purpose.
+### 3. Install Dependencies
+```bash
+pip install -e .
+```
 
-## Default provider strategy
+If you plan to run live market analysis, make sure `yfinance` is installed:
+```bash
+pip install yfinance
+```
 
-Implement a provider interface rather than coupling the application to one API.
+### 4. Start the Application
+Run the FastAPI server with Uvicorn:
+```bash
+uvicorn apps.api.main:app --reload --port 8000
+```
 
-Recommended initial adapter:
-- Alpha Vantage for daily equity time series, news/sentiment, and technical-indicator endpoints.
+### 5. Open the Dashboard
+Open your browser and navigate to:
+- **Interactive Web Dashboard:** [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+- **Swagger API Documentation:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- **Health Check API:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 
-Alternative adapter:
-- Polygon/Massive for market news and market snapshots where the account/licence supports them.
+Select any stock pill (`RELIANCE`, `TCS`, `INFY`, `NIFTY 50`, `SENSEX`) or type any NSE/BSE ticker into the search box and click **Analyze**.
 
-Provider capabilities differ by plan, market, entitlement, and endpoint. Do not hard-code assumptions about real-time access or quota limits.
+---
 
-## Technology baseline
+## Running Tests
 
-- Python 3.11+
-- uv
-- Pydantic / pydantic-settings
-- Pandas / NumPy
-- scikit-learn
-- optional PyTorch for LSTM sequence model
-- sentiment adapter (lexicon baseline and/or finance transformer)
-- LangGraph
-- official MCP Python SDK v2
-- Anthropic API provider adapter
-- MLflow
-- PostgreSQL
-- MinIO/S3
-- FastAPI
-- OpenTelemetry
-- structlog
-- pytest / pytest-asyncio / pytest-cov
-- Ruff / mypy
-- Docker Compose
-- GitHub Actions
+To verify that the indicator math, leakage checks, and Indian stock resolvers work properly:
 
-## Documentation map
+```bash
+pytest
+```
 
-1. `docs/01_PRD.md`
-2. `docs/02_PIPELINE_FLOW.md`
-3. `docs/03_SYSTEM_ARCHITECTURE.md`
-4. `docs/04_AGENT_SPECIFICATIONS.md`
-5. `docs/05_MCP_SERVER_SPEC.md`
-6. `docs/06_DATA_CONTRACTS.md`
-7. `docs/07_MARKET_DATA_PROVIDER_SPEC.md`
-8. `docs/08_SIGNAL_ANALYTICS_SPEC.md`
-9. `docs/09_POINT_IN_TIME_AND_LEAKAGE.md`
-10. `docs/10_OBSERVABILITY_AND_SECURITY.md`
-11. `docs/11_TEST_STRATEGY.md`
-12. `docs/12_DEVOPS_AND_DEPLOYMENT.md`
-13. `docs/13_IMPLEMENTATION_ROADMAP.md`
-14. `docs/14_ACCEPTANCE_CRITERIA.md`
-15. `docs/15_PORTFOLIO_DEMO.md`
-16. `docs/16_ARCHITECTURE_DECISIONS.md`
-17. `docs/17_REPORT_TEMPLATE.md`
-18. `docs/18_RUNBOOK.md`
+To run with concise output:
+```bash
+pytest -q
+```
 
-Implementation control:
-- `ANTIGRAVITY_HANDOFF.md`
-- `CLAUDE.md`
-- `.claude/agents/*`
+All 29 tests should pass.
 
-## Current external references
+---
 
-MCP:
-- https://blog.modelcontextprotocol.io/posts/2026-07-28/
-- https://py.sdk.modelcontextprotocol.io/protocol-versions/
+## API Usage Example
 
-Market/news providers:
-- https://www.alphavantage.co/documentation/
-- https://polygon.io/docs/rest/stocks/news
-- https://polygon.io/docs/rest/stocks/snapshots/single-ticker-snapshot
+You can run research runs directly through the REST API using `curl` or Python.
 
-Experiment/model lifecycle:
-- https://mlflow.org/docs/latest/model-registry/
+### Example Request (`POST /research/run`)
+```bash
+curl -X POST "http://127.0.0.1:8000/research/run" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "symbols": ["RELIANCE"],
+       "price_lookback_days": 120,
+       "news_lookback_hours": 48,
+       "signal_horizon_bars": 5,
+       "mode": "live"
+     }'
+```
 
-Observability:
-- https://opentelemetry.io/docs/languages/python/
+### Sample Response Excerpt
+```json
+{
+  "run_id": "a4af3275-7ecd-486a-b9ba-89a96fb673b6",
+  "status": "COMPLETED",
+  "reports": {
+    "RELIANCE": {
+      "symbol": "RELIANCE.NS",
+      "market_state": "BULLISH",
+      "signal_score": 0.28,
+      "confidence": 0.72,
+      "headline": "Reliance Industries Demonstrates Bullish Momentum in Energy & Retail",
+      "snapshot": {
+        "price": 1167.70,
+        "change": 16.65,
+        "change_percent": 1.45
+      }
+    }
+  }
+}
+```
+
+---
+
+## Project Structure
+
+```text
+├── apps/
+│   └── api/
+│       ├── main.py               # FastAPI entry point & API endpoints
+│       └── dashboard.py          # Interactive HTML/JS dashboard UI
+├── src/
+│   ├── contracts/                # Pydantic data schemas (reports, market, signals)
+│   ├── finance_core/             # Deterministic math engine
+│   │   ├── indicators/           # Technical indicators (SMA, RSI, MACD, ATR)
+│   │   ├── news/                 # News cleaning & deduplication
+│   │   ├── sentiment/            # Financial lexicon sentiment analysis
+│   │   ├── signal/               # Scorecard & ML signal classification
+│   │   └── evaluation/           # Point-in-time leakage tests & backtesting
+│   ├── providers/
+│   │   ├── indian_stocks.py      # NIFTY 50 / SENSEX catalog & symbol normalizer
+│   │   ├── live_provider.py      # Real-time Yahoo Finance & Google News RSS provider
+│   │   └── fixture_provider.py   # Offline test fixture provider
+│   ├── agents/                   # Report synthesis agent
+│   ├── orchestrator/             # 5-stage pipeline state machine
+│   └── storage/                  # In-memory and file-based report repositories
+├── tests/                        # Unit, contract, and end-to-end test suite
+├── pyproject.toml                # Project dependencies and configurations
+└── README.md
+```
+
+---
+
+## Configuration & Environment Variables
+
+For offline development, no external API keys are required. If you want to use Alpha Vantage or external services, create a `.env` file:
+
+```bash
+cp .env.example .env
+```
+
+Available options:
+```ini
+# Application mode: "live" (default for real-time market data) or "fixture" (offline test mode)
+APP_MODE=live
+
+# Optional provider keys:
+ALPHAVANTAGE_API_KEY=
+POLYGON_API_KEY=
+ANTHROPIC_API_KEY=
+```
+
+---
+
+## Disclaimer
+
+This project is built for market research, quantitative analysis, and educational purposes. It does not place live orders or provide certified financial investment advice.
