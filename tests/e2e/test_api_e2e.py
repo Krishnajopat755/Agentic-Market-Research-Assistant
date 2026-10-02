@@ -40,3 +40,21 @@ def test_api_research_run_and_get_report():
     md_resp = client.get(f"/research/reports/{run_id}/AAPL?format=markdown")
     assert md_resp.status_code == 200
     assert "# Daily Market Research Report: AAPL" in md_resp.text
+
+    # Test html report format
+    html_resp = client.get(f"/research/reports/{run_id}/AAPL?format=html")
+    assert html_resp.status_code == 200
+    assert "<!DOCTYPE html>" in html_resp.text
+    assert "Market Research Report: AAPL" in html_resp.text
+
+
+def test_api_root_dashboard():
+    resp = client.get("/")
+    assert resp.status_code == 200
+    assert "Agentic Market Research Assistant" in resp.text
+    assert "MCP ENGINE ONLINE" in resp.text
+
+
+def test_api_favicon():
+    resp = client.get("/favicon.ico")
+    assert resp.status_code == 204

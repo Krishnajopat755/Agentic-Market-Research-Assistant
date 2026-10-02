@@ -3,8 +3,10 @@
 from datetime import UTC, datetime
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 from pydantic import BaseModel, Field
 
+from apps.api.dashboard import get_dashboard_html
 from src.contracts.analysis import AnalysisRequest
 from src.contracts.report import DailyResearchReport
 from src.finance_core.reporting.renderer import render_html, render_markdown
@@ -29,6 +31,18 @@ class RunRequestPayload(BaseModel):
     news_lookback_hours: int = 24
     signal_horizon_bars: int = 5
     mode: str = "fixture"
+
+
+@app.get("/", response_class=HTMLResponse)
+async def root_dashboard():
+    """Interactive Market Research Assistant web dashboard."""
+    return HTMLResponse(content=get_dashboard_html())
+
+
+@app.get("/favicon.ico")
+async def favicon():
+    """Favicon endpoint returning 204 to prevent browser console 404s."""
+    return Response(status_code=204)
 
 
 @app.get("/health")
@@ -79,7 +93,7 @@ async def get_report(run_id: str, symbol: str, format: str = "json"):
 
     rep: DailyResearchReport = run.reports[symbol.upper()]
     if format == "html":
-        return render_html(rep)
+        return HTMLResponse(content=render_html(rep))
     elif format == "markdown":
-        return render_markdown(rep)
+        return PlainTextResponse(content=render_markdown(rep))
     return rep.model_dump(mode="json")
